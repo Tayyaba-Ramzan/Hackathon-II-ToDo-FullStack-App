@@ -1,118 +1,167 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
+import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
+import ErrorMessage from "@/components/atoms/ErrorMessage";
+import LoadingSpinner from "@/components/molecules/LoadingSpinner";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; username?: string; password?: string }>({});
+  const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, user, loading: authLoading } = useAuth();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading) {
+    return <LoadingSpinner fullScreen message="Loading..." />;
+  }
+
+  if (user) {
+    return null;
+  }
+
+  const validate = (): boolean => {
+    const newErrors: { email?: string; username?: string; password?: string } = {};
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Username validation
+    if (!username) {
+      newErrors.username = 'Username is required';
+    } else if (username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters';
+    } else if (username.length > 50) {
+      newErrors.username = 'Username must be 50 characters or less';
+    } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      newErrors.username = 'Username can only contain letters, numbers, and underscores';
+    }
+
+    // Password validation
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+      newErrors.password = 'Password must contain uppercase, lowercase, and number';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setApiError("");
+
+    if (!validate()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
       await register(email, username, password);
-      router.push("/"); // Redirect to home after successful registration
+      router.push("/dashboard");
     } catch (err: any) {
-      setError(err.message || "Registration failed");
+      setApiError(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
             Create your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{" "}
+            Already have an account?{" "}
             <Link href="/signin" className="font-medium text-blue-600 hover:text-blue-500">
-              sign in to your existing account
+              Sign in
             </Link>
           </p>
         </div>
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <div className="text-sm text-red-800">{error}</div>
-            </div>
-          )}
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                autoComplete="username"
-                required
-                minLength={3}
-                maxLength={50}
-                pattern="[a-zA-Z0-9_]+"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Username (alphanumeric and underscores)"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                minLength={8}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password (min 8 chars, uppercase, lowercase, number)"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+          {apiError && <ErrorMessage message={apiError} />}
+
+          <div className="space-y-4">
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              label="Email address"
+              placeholder="you@example.com"
+              error={errors.email}
+              required
+              autoComplete="email"
+              disabled={loading}
+            />
+
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              value={username}
+              onChange={setUsername}
+              label="Username"
+              placeholder="johndoe"
+              error={errors.username}
+              required
+              autoComplete="username"
+              disabled={loading}
+              maxLength={50}
+            />
+
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={setPassword}
+              label="Password"
+              placeholder="••••••••"
+              error={errors.password}
+              required
+              autoComplete="new-password"
+              disabled={loading}
+            />
           </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Creating account..." : "Sign up"}
-            </button>
-          </div>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            isLoading={loading}
+            disabled={loading}
+            size="lg"
+          >
+            Sign up
+          </Button>
         </form>
       </div>
     </div>
