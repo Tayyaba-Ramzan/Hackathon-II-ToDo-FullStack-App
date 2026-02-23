@@ -1,55 +1,193 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Project Constitution
+
+**Project:** High-Level Todo Full-Stack Web Application with Modern UI/UX
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Security First
+- JWT-based authentication with Better Auth
+- User isolation - each user sees only their own todos
+- XSS prevention and input validation at all layers
+- Secure API token handling with proper expiration
+- Environment variables for all secrets and database credentials
+- Password hashing with industry-standard algorithms (bcrypt/argon2)
+- No secrets committed to version control
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. UI/UX Excellence
+- Modern, responsive design across all devices (mobile, tablet, desktop)
+- Accessible design following WCAG guidelines where possible
+- Visually appealing with attention to detail
+- Clear user feedback for all actions (loading, success, error states)
+- Optional enhancements: animations, hover effects, modal dialogs, gradient hero sections
+- Intuitive navigation and user flows
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Spec-Driven Development (NON-NEGOTIABLE)
+- All features modular and fully documented before implementation
+- Clear specifications created before any code is written
+- Architecture decisions recorded in ADRs for significant choices
+- Tasks broken down with testable acceptance criteria
+- Implementation follows spec → plan → tasks → implement workflow
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Reproducibility
+- Backend, database, and frontend fully traceable
+- Clear documentation for setup and deployment
+- Version-controlled configuration
+- Consistent development environment across team members
+- All dependencies explicitly declared
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Scalability & Modularity
+- Modular components, reusable across features
+- Easy to extend with new functionality
+- Clean separation of concerns (frontend, backend, database)
+- Performance-optimized from the start
+- Database queries optimized with proper indexing
 
-### [PRINCIPLE_6_NAME]
+### VI. Rigor & Quality
+- All API endpoints validated and tested
+- Type safety enforced where applicable
+- Error handling at all layers (frontend, API, database)
+- Comprehensive logging and monitoring
+- Code reviews and quality gates
 
+## Key Standards
 
-[PRINCIPLE__DESCRIPTION]
+### Backend Architecture
+- **Framework:** FastAPI (Python)
+- **Database:** Neon Serverless PostgreSQL
+- **ORM:** SQLModel for type-safe database operations
+- **Authentication:** Better Auth with JWT tokens
+- **API Design:** RESTful, fully documented with OpenAPI/Swagger
+- **Validation:** Pydantic models for all requests/responses
+- **Error Handling:** Consistent error responses with proper HTTP status codes
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Frontend Architecture
+- **Framework:** Next.js 16+ with App Router
+- **Styling:** TailwindCSS or modern CSS-in-JS
+- **State Management:** React hooks, Context API where needed
+- **Type Safety:** TypeScript recommended for type checking
+- **Accessibility:** Semantic HTML, ARIA labels, keyboard navigation
+- **Performance:** Code splitting, lazy loading, optimized images
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Database Standards
+- **Provider:** Neon Serverless PostgreSQL
+- **Schema:** User isolation enforced at database level
+- **Migrations:** Tracked and version-controlled
+- **Indexes:** Optimized for common queries (user_id, created_at)
+- **Constraints:** Foreign keys, unique constraints, not null where appropriate
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Testing Standards
+- Unit tests for business logic and utilities
+- Integration tests for API endpoints
+- Frontend component tests recommended
+- E2E tests for critical user flows (signup, signin, CRUD operations)
+- Test coverage tracked and maintained
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### CI/CD Standards
+- Deployment-ready architecture
+- Environment-based configuration (dev, staging, production)
+- Automated testing in pipeline
+- Zero-downtime deployment strategy
+- Rollback procedures documented
+
+## Constraints
+
+### Implementation Constraints
+- All development via Claude Code agents (no manual coding)
+- Follow Spec-Driven Development process strictly
+- Use specialized agents for their domains (backend, frontend, database, auth)
+- No shortcuts or deviations from established patterns
+
+### Security Constraints
+- Never commit secrets or tokens to version control
+- Use `.env` files for local development
+- Environment variables for production secrets
+- Secure password hashing (bcrypt/argon2)
+- JWT tokens with proper expiration and refresh logic
+- Input validation on all user-provided data
+
+### Feature Constraints
+- Full CRUD operations for todos (Create, Read, Update, Delete)
+- Toggle completion status for todos
+- User authentication (signup, signin, signout)
+- Enhanced UI states (loading, error, success)
+- User isolation - no cross-user data access
+- Responsive design for all screen sizes
+
+### Architecture Constraints
+- Clean separation: frontend, backend, database
+- API-first design with clear contracts
+- Stateless backend (JWT tokens for session management)
+- Database connection pooling for performance
+- No tight coupling between layers
+
+## Success Criteria
+
+### Functionality
+- ✅ Fully functional multi-user Todo application
+- ✅ Users can signup, signin, and signout securely
+- ✅ Users can create, read, update, delete todos
+- ✅ Users can toggle todo completion status
+- ✅ Each user sees only their own todos (enforced at API and DB levels)
+
+### Security
+- ✅ Secure authentication with JWT tokens
+- ✅ User isolation enforced at API and database levels
+- ✅ No XSS or SQL injection vulnerabilities
+- ✅ Secrets managed via environment variables
+- ✅ Passwords properly hashed and never stored in plain text
+
+### UI/UX
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Modern, visually appealing interface
+- ✅ Accessible to keyboard and screen reader users
+- ✅ Clear feedback for user actions (loading, success, error)
+- ✅ Intuitive navigation and user flows
+
+### Code Quality
+- ✅ Clean, modular, scalable codebase
+- ✅ Well-documented APIs and components
+- ✅ Type-safe where applicable
+- ✅ Follows established patterns and conventions
+- ✅ No code duplication or unnecessary complexity
+
+### Deployment
+- ✅ Deployment-ready architecture
+- ✅ Environment-based configuration
+- ✅ Database migrations tracked and version-controlled
+- ✅ CI/CD pipeline ready
+- ✅ Monitoring and logging in place
+
+## Optional Enhancements
+
+- Animations and transitions for better UX
+- Hover effects and micro-interactions
+- Modal dialogs for confirmations (delete, signout)
+- Gradient hero sections on landing page
+- Dark mode support
+- Todo categories/tags for organization
+- Due dates and reminders
+- Search and filter functionality
+- Drag-and-drop reordering
+- Bulk operations (delete multiple, mark all complete)
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other practices and guidelines. All development work must comply with these principles and standards.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### Amendment Process
+- Amendments require documentation of rationale
+- Significant changes require ADR creation
+- Migration plan required for breaking changes
+- Team approval required for core principle changes
+
+### Compliance
+- All PRs must verify compliance with constitution
+- Code reviews must check adherence to standards
+- Complexity must be justified with clear reasoning
+- Deviations require explicit approval and documentation
+
+---
+
+**Version:** 1.0.0
+**Ratified:** 2026-02-23
+**Last Amended:** 2026-02-23

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(test:*)",
+      "Bash(tail:*)",
+      "Bash(cd D:\\\\phase_II_todo_fullstack_webapplication:*)",
+      "Bash(cd D:\\\\phase_II_todo_fullstack_webapplication\\\\frontend:*)",
+      "Bash(echo:*)",
+      "Bash(cd D:\\\\phase_II_todo_fullstack_webapplication\\\\backend:*)",
+      "Bash(head:*)"
+    ]
+  }
+}
