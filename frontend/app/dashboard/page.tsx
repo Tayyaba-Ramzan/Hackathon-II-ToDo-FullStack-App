@@ -12,6 +12,7 @@ import ConfirmDialog from '@/components/modals/ConfirmDialog';
 import Button from '@/components/atoms/Button';
 import ErrorMessage from '@/components/atoms/ErrorMessage';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import Toast from '@/components/molecules/Toast';
 import type { Task, TaskCreateInput, TaskUpdateInput } from '@/types';
 
 export default function DashboardPage() {
@@ -37,6 +38,7 @@ export default function DashboardPage() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   // Authentication guard
   useEffect(() => {
@@ -69,14 +71,20 @@ export default function DashboardPage() {
     completed: tasks.filter((t) => t.is_completed).length,
   };
 
+  // Show toast notification
+  const showToast = (message: string, type: 'success' | 'error' | 'info') => {
+    setToast({ message, type });
+  };
+
   // Handle create task
   const handleCreateTask = async (data: TaskCreateInput) => {
     setIsSubmitting(true);
     try {
       await createTask(data);
       setIsCreateModalOpen(false);
+      showToast('Task created successfully!', 'success');
     } catch (error) {
-      // Error is handled by context
+      showToast('Failed to create task. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -91,8 +99,9 @@ export default function DashboardPage() {
       await updateTask(selectedTask.id, data);
       setIsEditModalOpen(false);
       setSelectedTask(null);
+      showToast('Task updated successfully!', 'success');
     } catch (error) {
-      // Error is handled by context
+      showToast('Failed to update task. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -107,8 +116,9 @@ export default function DashboardPage() {
       await deleteTask(selectedTask.id);
       setIsDeleteDialogOpen(false);
       setSelectedTask(null);
+      showToast('Task deleted successfully!', 'success');
     } catch (error) {
-      // Error is handled by context
+      showToast('Failed to delete task. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -248,6 +258,16 @@ export default function DashboardPage() {
         variant="danger"
         isLoading={isSubmitting}
       />
+
+      {/* Toast Notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          isVisible={!!toast}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }
