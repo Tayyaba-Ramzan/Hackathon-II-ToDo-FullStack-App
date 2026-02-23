@@ -14,20 +14,20 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserRegister, session: Session = Depends(get_session)):
     """
     Register a new user account.
 
     Creates a new user with hashed password. Validates that email and username
-    are unique before creating the account.
+    are unique before creating the account. Returns JWT token for immediate authentication.
 
     Args:
         user_data: User registration data (email, username, password)
         session: Database session
 
     Returns:
-        Created user data (without password_hash)
+        JWT token and created user data (without password_hash)
 
     Raises:
         HTTPException 400: If email or username already exists
@@ -70,7 +70,16 @@ def register(user_data: UserRegister, session: Session = Depends(get_session)):
     session.refresh(new_user)
 
     logger.info(f"User registered successfully: {new_user.email} (ID: {new_user.id})")
-    return new_user
+
+    # Generate JWT token for immediate authentication
+    access_token = create_access_token(new_user.id)
+
+    # Return token and user data (same as login)
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        user=UserRead.model_validate(new_user)
+    )
 
 
 @router.post("/login", response_model=Token)
