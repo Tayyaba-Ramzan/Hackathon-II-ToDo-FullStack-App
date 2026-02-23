@@ -12,7 +12,6 @@ class TaskCreate(BaseModel):
         max_length=2000,
         description="Detailed task description"
     )
-    user_id: int = Field(..., description="ID of the user who owns this task")
 
 
 class TaskUpdate(BaseModel):
