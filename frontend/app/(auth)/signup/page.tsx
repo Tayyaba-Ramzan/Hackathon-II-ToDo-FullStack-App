@@ -37,7 +37,7 @@ export default function SignUpPage() {
   // Redirect authenticated users to dashboard
   useEffect(() => {
     if (!authLoading && user) {
-      router.push('/app/dashboard');
+      router.push('/dashboard');
     }
   }, [user, authLoading, router]);
 
@@ -234,7 +234,7 @@ export default function SignUpPage() {
       await register(email, username, password);
       showToast('Account created successfully! Redirecting...', 'success');
       setTimeout(() => {
-        router.push("/app/dashboard");
+        router.push("/dashboard");
       }, 1000);
     } catch (err: any) {
       const errorMessage = err.message || "Registration failed";

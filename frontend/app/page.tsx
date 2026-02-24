@@ -14,7 +14,7 @@ export default function LandingPage() {
   // Redirect authenticated users to app dashboard
   useEffect(() => {
     if (!loading && user) {
-      router.push('/app/dashboard');
+      router.push('/dashboard');
     }
   }, [user, loading, router]);
 

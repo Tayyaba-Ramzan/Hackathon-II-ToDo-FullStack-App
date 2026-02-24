@@ -21,7 +21,7 @@ export default function SignInPage() {
   // Redirect authenticated users to dashboard
   useEffect(() => {
     if (!authLoading && user) {
-      router.push('/app/dashboard');
+      router.push('/dashboard');
     }
   }, [user, authLoading, router]);
 
@@ -65,7 +65,7 @@ export default function SignInPage() {
 
     try {
       await login(email, password);
-      router.push("/app/dashboard");
+      router.push("/dashboard");
     } catch (err: any) {
       setApiError(err.message || "Login failed");
     } finally {

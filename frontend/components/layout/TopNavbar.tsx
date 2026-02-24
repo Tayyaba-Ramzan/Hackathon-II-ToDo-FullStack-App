@@ -28,7 +28,7 @@ export default function TopNavbar({ onMenuClick }: TopNavbarProps) {
           </button>
 
           {/* Logo (visible on mobile only) */}
-          <Link href="/app/dashboard" className="flex items-center gap-2 lg:hidden group">
+          <Link href="/dashboard" className="flex items-center gap-2 lg:hidden group">
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-violet-500/30 transition-all duration-300">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -74,7 +74,7 @@ export default function TopNavbar({ onMenuClick }: TopNavbarProps) {
                     <p className="text-xs text-gray-500 mt-1">{user?.email}</p>
                   </div>
                   <Link
-                    href="/app/settings"
+                    href="/settings"
                     onClick={() => setIsDropdownOpen(false)}
                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
