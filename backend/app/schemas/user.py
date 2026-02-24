@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
+from typing import Optional
 import re
 
 
@@ -69,6 +70,35 @@ class UserRead(BaseModel):
     email: str
     username: str
     created_at: datetime
+    dark_mode: bool = False
+    email_notifications: bool = True
+    task_reminders: bool = True
 
     class Config:
         from_attributes = True
+
+
+class UserUpdate(BaseModel):
+    """Schema for updating user profile."""
+
+    email: Optional[EmailStr] = Field(None, max_length=255, description="User's email address")
+    username: Optional[str] = Field(
+        None,
+        min_length=3,
+        max_length=50,
+        description="User's username (alphanumeric and underscores only)"
+    )
+
+    @validator('username')
+    def validate_username(cls, v):
+        if v is not None and not re.match(r'^[a-zA-Z0-9_]+$', v):
+            raise ValueError('Username must be alphanumeric with underscores only')
+        return v
+
+
+class UserPreferences(BaseModel):
+    """Schema for updating user preferences."""
+
+    dark_mode: Optional[bool] = None
+    email_notifications: Optional[bool] = None
+    task_reminders: Optional[bool] = None

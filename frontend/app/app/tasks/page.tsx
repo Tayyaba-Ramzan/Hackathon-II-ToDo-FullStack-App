@@ -1,36 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/auth-context';
+import React, { useState } from 'react';
 import { useTaskContext } from '@/lib/contexts/TaskContext';
-import TaskList from '@/components/organisms/TaskList';
+import PremiumTaskCard from '@/components/molecules/PremiumTaskCard';
 import TaskForm from '@/components/organisms/TaskForm';
 import TaskFilter from '@/components/molecules/TaskFilter';
 import Modal from '@/components/modals/Modal';
 import ConfirmDialog from '@/components/modals/ConfirmDialog';
-import Button from '@/components/atoms/Button';
-import ErrorMessage from '@/components/atoms/ErrorMessage';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import Toast from '@/components/molecules/Toast';
+import SkeletonLoader from '@/components/molecules/SkeletonLoader';
 import type { Task, TaskCreateInput, TaskUpdateInput } from '@/types';
 
-export default function DashboardPage() {
-  const router = useRouter();
-  const { user, loading: authLoading, logout } = useAuth();
+export default function TasksPage() {
   const {
     tasks,
     isLoading,
-    error,
     filter,
     filteredTasks,
-    fetchTasks,
     createTask,
     updateTask,
     deleteTask,
     toggleTask,
     setFilter,
-    clearError,
   } = useTaskContext();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -40,49 +31,22 @@ export default function DashboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // Authentication guard
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/signin');
-    }
-  }, [user, authLoading, router]);
-
-  // Fetch tasks on mount
-  useEffect(() => {
-    if (user) {
-      fetchTasks();
-    }
-  }, [user, fetchTasks]);
-
-  // Show loading spinner while checking auth
-  if (authLoading) {
-    return <LoadingSpinner fullScreen message="Loading..." />;
-  }
-
-  // Don't render if not authenticated
-  if (!user) {
-    return null;
-  }
-
-  // Task counts for filter
   const taskCounts = {
     all: tasks.length,
     active: tasks.filter((t) => !t.is_completed).length,
     completed: tasks.filter((t) => t.is_completed).length,
   };
 
-  // Show toast notification
   const showToast = (message: string, type: 'success' | 'error' | 'info') => {
     setToast({ message, type });
   };
 
-  // Handle create task
-  const handleCreateTask = async (data: TaskCreateInput) => {
+  const handleCreateTask = async (data: TaskCreateInput | TaskUpdateInput) => {
     setIsSubmitting(true);
     try {
-      await createTask(data);
+      await createTask(data as TaskCreateInput);
       setIsCreateModalOpen(false);
-      showToast('Task created successfully!', 'success');
+      showToast('✨ Task created successfully!', 'success');
     } catch (error) {
       showToast('Failed to create task. Please try again.', 'error');
     } finally {
@@ -90,16 +54,14 @@ export default function DashboardPage() {
     }
   };
 
-  // Handle edit task
-  const handleEditTask = async (data: TaskUpdateInput) => {
+  const handleEditTask = async (data: TaskCreateInput | TaskUpdateInput) => {
     if (!selectedTask) return;
-
     setIsSubmitting(true);
     try {
       await updateTask(selectedTask.id, data);
       setIsEditModalOpen(false);
       setSelectedTask(null);
-      showToast('Task updated successfully!', 'success');
+      showToast('✅ Task updated successfully!', 'success');
     } catch (error) {
       showToast('Failed to update task. Please try again.', 'error');
     } finally {
@@ -107,16 +69,14 @@ export default function DashboardPage() {
     }
   };
 
-  // Handle delete task
   const handleDeleteTask = async () => {
     if (!selectedTask) return;
-
     setIsSubmitting(true);
     try {
       await deleteTask(selectedTask.id);
       setIsDeleteDialogOpen(false);
       setSelectedTask(null);
-      showToast('Task deleted successfully!', 'success');
+      showToast('🗑️ Task deleted successfully!', 'success');
     } catch (error) {
       showToast('Failed to delete task. Please try again.', 'error');
     } finally {
@@ -124,16 +84,14 @@ export default function DashboardPage() {
     }
   };
 
-  // Handle toggle task
   const handleToggleTask = async (id: number) => {
     try {
       await toggleTask(id);
     } catch (error) {
-      // Error is handled by context
+      showToast('Failed to update task status.', 'error');
     }
   };
 
-  // Open edit modal
   const openEditModal = (id: number) => {
     const task = tasks.find((t) => t.id === id);
     if (task) {
@@ -142,7 +100,6 @@ export default function DashboardPage() {
     }
   };
 
-  // Open delete dialog
   const openDeleteDialog = (id: number) => {
     const task = tasks.find((t) => t.id === id);
     if (task) {
@@ -152,63 +109,75 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">My Tasks</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Welcome back, {user.username}!
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button
-                variant="primary"
-                onClick={() => setIsCreateModalOpen(true)}
-              >
-                + Create Task
-              </Button>
-              <Button variant="secondary" onClick={logout}>
-                Logout
-              </Button>
-            </div>
+      <div className="mb-8 animate-fade-in">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">My Tasks</h1>
+            <p className="text-gray-600 mt-1">Manage and organize all your tasks</p>
           </div>
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="group relative px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40 transition-all duration-300 hover:-translate-y-1"
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              New Task
+            </span>
+          </button>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Error Message */}
-        {error && (
-          <ErrorMessage message={error} className="mb-6" />
-        )}
-
-        {/* Task Filter */}
-        <div className="bg-white rounded-lg shadow-sm mb-6">
-          <div className="px-6 pt-4">
-            <TaskFilter
-              currentFilter={filter}
-              onFilterChange={setFilter}
-              taskCounts={taskCounts}
-            />
-          </div>
+      {/* Task Filter */}
+      <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-gray-200/50 shadow-lg mb-6 animate-fade-in transition-colors duration-300">
+        <TaskFilter
+            currentFilter={filter}
+            onFilterChange={setFilter}
+            taskCounts={taskCounts}
+          />
         </div>
 
         {/* Task List */}
-        <TaskList
-          tasks={filteredTasks}
-          filter={filter}
-          onToggle={handleToggleTask}
-          onEdit={openEditModal}
-          onDelete={openDeleteDialog}
-          isLoading={isLoading}
-          onCreateTask={() => setIsCreateModalOpen(true)}
-        />
-      </main>
+        <div className="space-y-4">
+          {isLoading ? (
+            <SkeletonLoader type="list" count={8} />
+          ) : filteredTasks.length === 0 ? (
+            <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-12 border border-gray-200/50 shadow-lg text-center transition-colors duration-300">
+              <svg className="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">No tasks found</h3>
+              <p className="text-gray-600 mb-6">
+                {filter === 'all'
+                  ? 'Create your first task to get started!'
+                  : `No ${filter} tasks. Try a different filter.`}
+              </p>
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Create Task
+              </button>
+            </div>
+          ) : (
+            filteredTasks.map((task, index) => (
+              <div key={task.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-slide-in-up">
+                <PremiumTaskCard
+                  task={task}
+                  onToggle={handleToggleTask}
+                  onEdit={openEditModal}
+                  onDelete={openDeleteDialog}
+                  isLoading={isLoading}
+                />
+              </div>
+            ))
+          )}
+        </div>
 
-      {/* Create Task Modal */}
+      {/* Modals */}
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
@@ -222,7 +191,6 @@ export default function DashboardPage() {
         />
       </Modal>
 
-      {/* Edit Task Modal */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => {
@@ -243,7 +211,6 @@ export default function DashboardPage() {
         />
       </Modal>
 
-      {/* Delete Confirmation Dialog */}
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onClose={() => {
@@ -259,7 +226,6 @@ export default function DashboardPage() {
         isLoading={isSubmitting}
       />
 
-      {/* Toast Notification */}
       {toast && (
         <Toast
           message={toast.message}
@@ -268,6 +234,6 @@ export default function DashboardPage() {
           onClose={() => setToast(null)}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -9,7 +9,28 @@
       "Bash(cd D:\\\\phase_II_todo_fullstack_webapplication\\\\frontend:*)",
       "Bash(echo:*)",
       "Bash(cd D:\\\\phase_II_todo_fullstack_webapplication\\\\backend:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(netstat:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(sleep 2:*)",
+      "Bash(sleep 3:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(taskkill:*)",
+      "Bash(cd frontend:*)",
+      "Bash(cd backend:*)",
+      "Bash(echo Cannot load app:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZXhwIjoxNzcxODg1Njc4LCJpYXQiOjE3NzE4ODIwNzh9.57ArA592Fm6voup4kOgqy0Sy7EQj87MqLyjpB0AZ3do\" && curl -X GET http://localhost:8001/tasks/ -H \"Authorization: Bearer $TOKEN\" 2>&1)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiZXhwIjoxNzcxODg1Njc4LCJpYXQiOjE3NzE4ODIwNzh9.57ArA592Fm6voup4kOgqy0Sy7EQj87MqLyjpB0AZ3do\" && curl -X POST http://localhost:8001/tasks/ -H \"Authorization: Bearer $TOKEN\" -H \"Content-Type: application/json\" -d '{\"title\":\"Test Task\",\"description\":\"This is a test task\"}' 2>&1)",
+      "Bash(cd:*)",
+      "Bash(sleep 5:*)",
+      "Bash(tasklist:*)",
+      "Bash(echo Backend Status: NOT RUNNING:*)",
+      "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"from app.utils.password import hash_password; print\\('Password hashing works:', bool\\(hash_password\\('test123'\\)\\)\\)\" 2>&1)",
+      "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"from app.utils.password import hash_password; import traceback; try: h = hash_password\\('test123'\\); print\\('Hash created:', h[:20]\\); except Exception as e: traceback.print_exc\\(\\)\" 2>&1)",
+      "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"\nfrom app.utils.password import hash_password\nimport traceback\ntry:\n    h = hash_password\\('test123'\\)\n    print\\('Hash created successfully'\\)\n    print\\('Hash length:', len\\(h\\)\\)\nexcept Exception as e:\n    print\\('Error:', str\\(e\\)\\)\n    traceback.print_exc\\(\\)\n\" 2>&1)",
+      "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"\nfrom app.database import get_session\nfrom sqlmodel import select\nfrom app.models.user import User\n\nsession = next\\(get_session\\(\\)\\)\nusers = session.exec\\(select\\(User\\)\\).all\\(\\)\nprint\\(f'Total users in database: {len\\(users\\)}'\\)\nfor user in users[:5]:\n    print\\(f'  - {user.email} \\({user.username}\\)'\\)\n\" 2>&1)"
     ]
   }
 }

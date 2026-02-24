@@ -2,7 +2,7 @@ import React from 'react';
 import type { Task, TaskFilter } from '@/types';
 import TaskCard from '@/components/molecules/TaskCard';
 import EmptyState from '@/components/molecules/EmptyState';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import SkeletonLoader from '@/components/molecules/SkeletonLoader';
 
 interface TaskListProps {
   tasks: Task[];
@@ -25,8 +25,8 @@ export default function TaskList({
 }: TaskListProps) {
   if (isLoading && tasks.length === 0) {
     return (
-      <div className="flex justify-center py-12">
-        <LoadingSpinner size="lg" message="Loading tasks..." />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <SkeletonLoader type="card" count={6} />
       </div>
     );
   }

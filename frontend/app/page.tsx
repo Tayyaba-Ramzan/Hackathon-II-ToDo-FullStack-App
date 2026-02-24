@@ -3,18 +3,18 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import Hero from '@/components/layout/Hero';
-import Footer from '@/components/layout/Footer';
+import PremiumHero from '@/components/layout/PremiumHero';
+import PremiumFooter from '@/components/layout/PremiumFooter';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export default function LandingPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  // Redirect authenticated users to dashboard
+  // Redirect authenticated users to app dashboard
   useEffect(() => {
     if (!loading && user) {
-      router.push('/dashboard');
+      router.push('/app/dashboard');
     }
   }, [user, loading, router]);
 
@@ -29,8 +29,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Hero />
-      <Footer />
+      <PremiumHero />
+      <PremiumFooter />
     </div>
   );
 }

@@ -28,7 +28,7 @@ export default function Checkbox({
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
         disabled={disabled}
-        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        className="h-4 w-4 text-violet-600 border-gray-300 rounded focus:ring-violet-500 focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-white transition-colors duration-200"
         aria-checked={checked}
       />
       {label && (

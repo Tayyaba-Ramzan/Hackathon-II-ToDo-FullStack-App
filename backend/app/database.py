@@ -15,6 +15,9 @@ engine = create_engine(
 
 def create_db_and_tables():
     """Create all database tables."""
+    # Import models to register them with SQLModel metadata
+    from app.models import User, Task  # noqa: F401
+
     try:
         SQLModel.metadata.create_all(engine)
         logger.info("Database tables created successfully")

@@ -82,7 +82,7 @@ export default function Modal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in"
       onClick={(e) => {
         if (closeOnOverlayClick && e.target === e.currentTarget) {
           onClose();
@@ -91,19 +91,19 @@ export default function Modal({
     >
       <div
         ref={modalRef}
-        className={`bg-white rounded-lg shadow-xl w-full ${sizeStyles[size]} animate-scale-in`}
+        className={`bg-white rounded-2xl shadow-2xl w-full ${sizeStyles[size]} animate-scale-in border border-violet-100 transition-colors duration-300`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
       >
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-violet-50 to-purple-50 transition-colors duration-300">
+            <h2 id="modal-title" className="text-xl font-semibold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
               {title}
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+              className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 rounded"
               aria-label="Close modal"
             >
               <svg

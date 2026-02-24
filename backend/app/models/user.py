@@ -15,4 +15,12 @@ class User(SQLModel, table=True):
     password_hash: str = Field(max_length=255)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
-    tasks: List["Task"] = Relationship(back_populates="user")
+    # User preferences
+    dark_mode: bool = Field(default=False)
+    email_notifications: bool = Field(default=True)
+    task_reminders: bool = Field(default=True)
+
+    tasks: List["Task"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"cascade": "all, delete-orphan"}
+    )

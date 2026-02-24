@@ -34,7 +34,7 @@ export default function TaskFilterComponent({
             onClick={() => onFilterChange(filter.value)}
             className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${
               isActive
-                ? 'border-blue-600 text-blue-600'
+                ? 'border-violet-600 text-violet-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
             }`}
             role="tab"
@@ -45,7 +45,7 @@ export default function TaskFilterComponent({
             <span
               className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                 isActive
-                  ? 'bg-blue-100 text-blue-700'
+                  ? 'bg-violet-100 text-violet-700'
                   : 'bg-gray-100 text-gray-600'
               }`}
             >

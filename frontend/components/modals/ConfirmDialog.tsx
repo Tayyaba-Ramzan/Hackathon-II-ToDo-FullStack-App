@@ -12,7 +12,7 @@ interface ConfirmDialogProps {
   message: string;
   confirmText?: string;
   cancelText?: string;
-  variant?: 'danger' | 'warning';
+  variant?: 'danger';
   isLoading?: boolean;
 }
 
