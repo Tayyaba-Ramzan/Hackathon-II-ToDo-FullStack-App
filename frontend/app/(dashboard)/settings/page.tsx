@@ -219,8 +219,8 @@ export default function SettingsPage() {
         </div>
 
         {/* Danger Zone */}
-          <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-rose-200/50 shadow-lg animate-slide-in-up transition-colors duration-300" style={{ animationDelay: '200ms' }}>
-            <h2 className="text-xl font-bold text-rose-600 mb-4 flex items-center gap-2">
+          <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-red-200/50 shadow-lg animate-slide-in-up transition-colors duration-300" style={{ animationDelay: '200ms' }}>
+            <h2 className="text-xl font-bold text-red-600 mb-4 flex items-center gap-2">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
@@ -228,14 +228,14 @@ export default function SettingsPage() {
             </h2>
 
             <div className="space-y-4">
-              <div className="p-4 bg-rose-50 rounded-xl border border-rose-200 transition-colors duration-300">
-                <h3 className="font-medium text-rose-900 mb-2">Delete Account</h3>
-                <p className="text-sm text-rose-700 mb-4">
+              <div className="p-4 bg-red-50 rounded-xl border border-red-200 transition-colors duration-300">
+                <h3 className="font-medium text-red-900 mb-2">Delete Account</h3>
+                <p className="text-sm text-red-700 mb-4">
                   Once you delete your account, there is no going back. All your tasks and data will be permanently deleted.
                 </p>
                 <button
                   onClick={() => setShowDeleteModal(true)}
-                  className="px-4 py-2 bg-rose-500 text-white font-medium rounded-lg hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/30 hover:shadow-xl hover:shadow-rose-500/40"
+                  className="px-4 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-600/40"
                 >
                   Delete Account
                 </button>
