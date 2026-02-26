@@ -31,7 +31,9 @@
       "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"from app.utils.password import hash_password; import traceback; try: h = hash_password\\('test123'\\); print\\('Hash created:', h[:20]\\); except Exception as e: traceback.print_exc\\(\\)\" 2>&1)",
       "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"\nfrom app.utils.password import hash_password\nimport traceback\ntry:\n    h = hash_password\\('test123'\\)\n    print\\('Hash created successfully'\\)\n    print\\('Hash length:', len\\(h\\)\\)\nexcept Exception as e:\n    print\\('Error:', str\\(e\\)\\)\n    traceback.print_exc\\(\\)\n\" 2>&1)",
       "Bash(cd D:/phase_II_todo_fullstack_webapplication/backend && python -c \"\nfrom app.database import get_session\nfrom sqlmodel import select\nfrom app.models.user import User\n\nsession = next\\(get_session\\(\\)\\)\nusers = session.exec\\(select\\(User\\)\\).all\\(\\)\nprint\\(f'Total users in database: {len\\(users\\)}'\\)\nfor user in users[:5]:\n    print\\(f'  - {user.email} \\({user.username}\\)'\\)\n\" 2>&1)",
-      "Bash(cd D:/phase_II_todo_fullstack_webapplication && git push origin main 2>&1)"
+      "Bash(cd D:/phase_II_todo_fullstack_webapplication && git push origin main 2>&1)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)"
     ]
   }
 }
